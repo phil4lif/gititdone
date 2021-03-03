@@ -53,7 +53,10 @@ var getUserRepos = function (user) {
         } else {
             alert('Error: Not Found');
         }
-    });
+    })
+    .catch(function(error) {
+        alert('Unable to Connect to GitHub!')
+    })
 }
 
 userFormEl.addEventListener("submit", formSubmitHandler);
