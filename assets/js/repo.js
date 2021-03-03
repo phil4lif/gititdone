@@ -33,7 +33,7 @@ var getIssues = function (repo) {
                 }
             })
         } else {
-            alert('Something went wrong with this request');
+            document.location.replace('./index.html');
         }
     });
 };
