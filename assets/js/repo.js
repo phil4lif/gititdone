@@ -1,6 +1,6 @@
 var issueContainerEl = document.querySelector('#issues-container');
 var limitWarningEl = document.querySelector('#limit-warning');
-
+var repoNameEl = document.querySelector('#repo-name');
 
 var displayWarning = function(repo) {
     limitWarningEl.textContent = 'Showing first 30 issues ';
@@ -11,6 +11,12 @@ var displayWarning = function(repo) {
     limitWarningEl.appendChild(linkEl);
 };
 
+var getRepoName = function() {
+    var queryString = document.location.search
+    var repoName = queryString.split('=')[1];
+    getIssues(repoName);
+    repoNameEl.textContent = repoName;
+};
 var getIssues = function(repo) {
     var apiURL = `https://api.github.com/repos/${repo}/issues`;
     fetch(apiURL).then(function(response) {
@@ -53,4 +59,4 @@ var displayIssues = function(issues) {
         issueContainerEl.appendChild(issueEl);
     };
 };
-getIssues('facebook/react')
+getRepoName();
