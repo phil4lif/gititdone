@@ -21,7 +21,7 @@ var displayRepos = function(repos, searchTerm) {
         return;
     }
     repoContainerEl.textContent = '';
-    repoSearchTerm.textContent = searchTerm;
+
     for(let i = 0; i < repos.length; i++) {
         var repoName = repos[i].owner.login + '/' + repos[i].name;
         var repoEl = document.createElement('div');
@@ -51,7 +51,7 @@ var getUserRepos = function (user) {
                 displayRepos(data, user);
             });
         } else {
-            alert('Error: ' + response.statusText);
+            alert('Error: Not Found');
         }
     });
 }
