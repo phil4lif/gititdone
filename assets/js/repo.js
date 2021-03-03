@@ -1,19 +1,47 @@
 var issueContainerEl = document.querySelector('#issues-container');
+var limitWarningEl = document.querySelector('#limit-warning');
+var repoNameEl = document.querySelector('#repo-name');
 
-var getIssues = function(repo) {
+var displayWarning = function (repo) {
+    limitWarningEl.textContent = 'Showing first 30 issues ';
+    var linkEl = document.createElement('a');
+    linkEl.textContent = 'See More Issues on GitHub.com';
+    linkEl.setAttribute('href', `https://github.com/${repo}/issues`);
+    linkEl.setAttribute('target', '_blank');
+    limitWarningEl.appendChild(linkEl);
+};
+
+var getRepoName = function () {
+    var queryString = document.location.search
+    var repoName = queryString.split('=')[1];
+    if (repoName) {
+        getIssues(repoName);
+        repoNameEl.textContent = repoName;
+    } else {
+        document.location.replace('./index.html');
+    }
+
+};
+var getIssues = function (repo) {
     var apiURL = `https://api.github.com/repos/${repo}/issues`;
-    fetch(apiURL).then(function(response) {
+    fetch(apiURL).then(function (response) {
         if (response.ok) {
-            response.json().then(function(data){
+            response.json().then(function (data) {
                 displayIssues(data);
+                if (response.headers.get('Link')) {
+                    displayWarning(repo);
+                }
             })
         } else {
-            alert('Something went wrong with this request');
+            document.location.replace('./index.html');
         }
     });
-}
+};
 
-var displayIssues = function(issues) {
+var displayIssues = function (issues) {
+    if (issues.length === 0) {
+        issueContainerEl.textContent = 'This Repo Has No Open Issues or PR\'s'
+    }
     for (var i = 0; i < issues.length; i++) {
         var issueEl = document.createElement('a');
         issueEl.classList = 'list-item flex-row justify-space-between align-center';
@@ -34,6 +62,6 @@ var displayIssues = function(issues) {
         }
         issueEl.appendChild(typeEl);
         issueContainerEl.appendChild(issueEl);
-    }
-}
-getIssues('phil4lif/gititdone')
+    };
+};
+getRepoName();
